@@ -15,7 +15,7 @@ class RobexCommand(Command):
         input, output: input and brain-extracted output
         out_mask: output mask (binary image) marking where the brain is
         """
-        self.cmd = '/data/vision/polina/shared_software/ROBEX/runROBEX.sh %(input)s %(output)s %(out_mask)s'
+        self.cmd = ROBEXPATH + '/runROBEX.sh %(input)s %(output)s %(out_mask)s'
         self.outfiles = [kwargs['output'], kwargs['out_mask']]
         Command.__init__(self, comment, **kwargs)
 
