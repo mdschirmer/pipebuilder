@@ -36,7 +36,7 @@ class Dataset(object):
     """
     all_datasets = [] # Static list of all dataset objects
     def __init__(self, base_dir, original_template, processing_template,
-            log_template=None, default_extension='.nii.gz'):
+            log_template=None, pickle_template=None, default_extension='.nii.gz'):
         """
         All templates should be specified using curly-brace formatting, e.g.:
         /home/data/{subject}/{modality}{extension}
@@ -73,6 +73,11 @@ class Dataset(object):
             self.log_template = base_dir
         else:
             self.log_template = os.path.join(base_dir, log_template)
+
+        if pickle_template is None:
+            self.pickle_template = 'missing'
+        else:
+            self.pickle_template = os.path.join(base_dir, pickle_template)
 
         self.filenames_to_field_values = {}
         self.mandatory_files = set()
@@ -159,6 +164,10 @@ class Dataset(object):
     def get_log_folder(self, **partial_format):
         "Returns the log folder for a given formatting"
         return self.log_template.format(**partial_format)
+
+    def get_pickle_file(self, **partial_format):
+        "Returns the pickle filename for a given formatting"
+        return self.pickle_template.format(**partial_format)
 
     def get_original(self, **format):
         "Returns an original file using the template and the provided fields"

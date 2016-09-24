@@ -76,20 +76,12 @@ class NiiToolsDiceCommand(Command):
 class NiiToolsUpsampleCommand(Command):
     def __init__(self, comment, **kwargs):
         kwargs.setdefault('isotrop_res',int(isotrop_upsampling))
-        name_parts=kwargs['output'].split('/')[-1].split('_')
-        log_name= '_'.join(name_parts[0:2]) + '_zoom_log.pickle'
-        path_name=os.path.dirname(kwargs['output'])
-        kwargs['zoom_values_file']= os.path.join(path_name, log_name)
         self.cmd = PYTHON + ' ' + NIITOOLS_PATH + ' upsample %(input)s %(output)s %(zoom_values_file)s %(isotrop_res)g'
         self.outfiles = [kwargs['output']]
         Command.__init__(self, comment, **kwargs)
 
 class NiiToolsDownsampleCommand(Command):
     def __init__(self, comment, **kwargs):
-        name_parts=kwargs['output'].split('/')[-1].split('_')
-        log_name= '_'.join(name_parts[0:2]) + '_zoom_log.pickle'
-        path_name=os.path.dirname(kwargs['output'])
-        kwargs['zoom_values_file']= os.path.join(path_name, log_name)
         self.cmd = PYTHON + ' ' + NIITOOLS_PATH + ' downsample %(input)s %(output)s %(zoom_values_file)s'
         self.outfiles = [kwargs['output']]
         Command.__init__(self, comment, **kwargs)
