@@ -215,10 +215,12 @@ class ANTSCommand(Command):
         kwargs.setdefault('dimension', 3)
         kwargs.setdefault('transformation', 'Syn[0.25]')
         kwargs.setdefault('affine_iterations', '10000x10000x10000x10000x10000')
+        kwargs.setdefault('histogrammatching','1')
         self.cmd = ANTSPATH + \
             '/ANTS %(dimension)s ' + \
             '-m %(metric)s[%(fixed)s,%(moving)s,1,%(radiusBins)d] ' + \
             '-t %(transformation)s ' + \
+            '--use-Histogram-Matching %(histogrammatching)s ' + \
             '-o %(output)s ' + \
             '--number-of-affine-iterations %(affine_iterations)s'
         outfiles = ['Affine.txt']

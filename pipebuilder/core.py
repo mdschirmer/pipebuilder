@@ -347,7 +347,7 @@ class Command(object):
 
                 elif clobber_existing_outputs or command.clobber or not command.check_outputs():
                     if len(datasets) > 0 and not command.has_all_valid_inputs(datasets):
-                        f.write('# *** Skipping (due to missing input) ' + command.comment + '\n'*2)
+                        f.write('# *** Skipping (due to missing input) ' + command.comment + ' (len(datasets): %i, has_all_valid_inputs(datasets): %i)' %(len(datasets), command.has_all_valid_inputs(datasets)) + ' \n'*2)
                         command.invalidate_outputs(datasets)
                     else:
                         cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(command.cmd).digest())
@@ -432,6 +432,7 @@ class Command(object):
             #found_invalidation = False
             for dataset in datasets:
                 if dataset.is_invalid(input):
+                    print(input)
                     return False
         return True
 
