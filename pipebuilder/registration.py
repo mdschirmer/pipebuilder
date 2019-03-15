@@ -216,6 +216,7 @@ class ANTSCommand(Command):
         kwargs.setdefault('transformation', 'Syn[0.25]')
         kwargs.setdefault('affine_iterations', '10000x10000x10000x10000x10000')
         kwargs.setdefault('histogrammatching','1')
+        kwargs.setdefault('metric','MI')
         self.cmd = ANTSPATH + \
             '/ANTS %(dimension)s ' + \
             '-m %(metric)s[%(fixed)s,%(moving)s,1,%(radiusBins)d] ' + \

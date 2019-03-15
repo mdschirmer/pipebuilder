@@ -6,7 +6,6 @@ from .util import config
 ROBEXPATH = 'none'#config.get('Binaries', 'ROBEXPATH')
 TENSORFLOWPYTHON = config.get('Binaries', 'TENSORFLOWPYTHON')
 NEURONSS = config.get('Binaries', 'NEURONSS')
-INTRES = config.get('Binaries', 'INTRES')
 
 class RobexCommand(Command):
     def __init__(self, comment, **kwargs):
@@ -33,8 +32,8 @@ class NeuronSSCommand(Command):
         input, output: input and brain-extracted output
         out_mask: output mask (binary image) marking where the brain is
         """
-        self.cmd = TENSORFLOWPYTHON + ' -u ' + NEURONSS + ' %(input)s %(out_mask)s %(output)s'
-        self.outfiles = [kwargs['output'], kwargs['out_mask']]
+        self.cmd = TENSORFLOWPYTHON + ' -u ' + NEURONSS + ' -i %(input)s -o %(out_mask)s -b %(output)s -n %(out_intres)s -g %(out_gmwm_mask)s -r %(out_refined_mask)s'
+        self.outfiles = [kwargs['out_intres'], kwargs['out_mask']]
         Command.__init__(self, comment, **kwargs)
 
 
