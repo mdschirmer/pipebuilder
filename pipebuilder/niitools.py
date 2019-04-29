@@ -108,3 +108,8 @@ class NiiToolsSSDCommand(Command):
     def __init__(self, comment, **kwargs):
         self.cmd = PYTHON + ' ' + NIITOOLS_PATH + ' ssd %(in1)s %(in2)s %(output)s'
         Command.__init__(self, comment, **kwargs)
+
+class NiiToolsBinarize(Command):
+    def __init__(self, comment, **kwargs):
+        self.cmd = PYTHON + ' ' + NIITOOLS_PATH + ' binarize %(input)s %(output)s %(threshold)s'
+        Command.__init__(self, comment, **kwargs)
