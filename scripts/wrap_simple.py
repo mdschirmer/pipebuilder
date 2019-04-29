@@ -15,7 +15,7 @@ def main(argv):
     prefix = argv[1]
     cmd = ' '.join(argv[2:])
 
-    cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(cmd).digest())
+    cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(cmd.encode('utf-8')).digest()).decode('utf-8')
 
     # TODO input checking
     print('\n    '.join(argv[2:]))
@@ -23,6 +23,8 @@ def main(argv):
             stderr=subprocess.PIPE)
 
     (stdout, stderr) = proc.communicate()
+    stdout = stdout.decode('utf-8')
+    stderr = stderr.decode('utf-8')
     retcode = proc.returncode
 
     summary = {'stdout': stdout, 'stderr': stderr, 'retcode': retcode}

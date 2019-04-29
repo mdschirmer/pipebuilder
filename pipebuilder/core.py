@@ -350,7 +350,7 @@ class Command(object):
                         f.write('# *** Skipping (due to missing input) ' + command.comment + ' (len(datasets): %i, has_all_valid_inputs(datasets): %i)' %(len(datasets), command.has_all_valid_inputs(datasets)) + ' \n'*2)
                         command.invalidate_outputs(datasets)
                     else:
-                        cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(command.cmd).digest())
+                        cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(command.cmd.encode('utf-8')).digest()).decode('utf-8')
                         f.write('# ' + command.comment + '\n')
                         st = ''
                         if tracker is not None:
@@ -368,7 +368,7 @@ class Command(object):
                         f.write(st + command.cmd + '\n'*4)
                 else:
                     f.write('# *** Skipping (due to already-present output) ' + command.comment + '\n'*2)
-        os.chmod(command_file, 0775)
+        os.chmod(command_file, 0o775)
 
     def __init__(self, comment, **kwargs):
         self.clobber = 'clobber' in kwargs and kwargs['clobber']
@@ -385,7 +385,7 @@ class Command(object):
         self.parameters = kwargs
         self.comment = comment
 
-        good_kwargs = dict( ((k, to_filename(v)) for (k, v) in kwargs.iteritems()) )
+        good_kwargs = dict( ((k, to_filename(v)) for (k, v) in kwargs.items()) )
         self.cmd_template = self.cmd
         self.cmd = self.cmd % good_kwargs
 

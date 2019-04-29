@@ -15,13 +15,14 @@ import numpy as np
 
 from . import registration
 
+import pdb
 
 def get_single_line_numeric(filename):
     is_multiline = True
     try:
         with open(filename) as f:
             firstline = f.readline().strip()
-            for i in xrange(2):
+            for i in range(2):
                 try:
                     is_multiline = (f.next() != '')
                 except StopIteration:
@@ -82,8 +83,8 @@ class Tracker(object):
         # outputs that j depends on
         self.dependency_files = np.empty([N, N], dtype='object')
 
-        for i in xrange(N):
-            for j in xrange(N):
+        for i in range(N):
+            for j in range(N):
                 self.dependency_files[i, j] = []
 
         for (i, early_command) in enumerate(self.commands):
@@ -131,7 +132,7 @@ class Tracker(object):
         # out['all_inputs'] = sorted(command.inputs)
         # out['cmd'] = command.cmd
         # out['named_outfiles'] = {}
-        # for (param_name, filename) in command.parameters.iteritems():
+        # for (param_name, filename) in command.parameters.items():
         #     if filename in out['outfiles']:
         #         out['named_outfiles'][param_name] = filename
 
@@ -194,12 +195,12 @@ class Tracker(object):
         for (k, command) in enumerate(self.commands):
             outfiles = command.outfiles[:]
             named_outfiles = {}
-            for (param_name, outfilename) in command.parameters.iteritems():
+            for (param_name, outfilename) in command.parameters.items():
                 if outfilename in outfiles:
                     named_outfiles[param_name] = outfilename
                     outfiles.remove(outfilename)
             klass = command.__class__.__name__
-            cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(command.cmd).digest())
+            cmdline_hash = base64.urlsafe_b64encode(hashlib.md5(command.cmd.encode('utf-8')).digest()).decode('utf-8')
             metadata_prefix = os.path.join(metadata_path, cmdline_hash)
             nodes.append({'name': command.comment,
                           'class': self.command_classes[command.__class__],
@@ -214,12 +215,12 @@ class Tracker(object):
                           'supernode': reverse_mapping[k]})
 
         edges = collections.Counter()
-        for i in xrange(N):
-            for j in xrange(i+1, N):
+        for i in range(N):
+            for j in range(i+1, N):
                 weight = int(self.dependency_graph[i, j])
                 edges[(reverse_mapping[i], reverse_mapping[j])] += weight
         links = []
-        for ((supersource, supertarget), weight) in edges.iteritems():
+        for ((supersource, supertarget), weight) in edges.items():
             if weight > 0:
                 links.append({
                     'weight': weight,
@@ -284,7 +285,7 @@ class Tracker(object):
                           input_map, output_map))
             i+=1
         (input_nodes, mapping) = self.make_selectfiles(nodes)
-        for i in xrange(len(self.commands)):
+        for i in range(len(self.commands)):
             (parent_node, parent_inputs, parent_outputs) = nodes[i]
             for (input_file, input_name) in parent_inputs.items():
                 if input_file in mapping:
@@ -292,7 +293,7 @@ class Tracker(object):
                     input_source = input_nodes[j]
                     nipype_input_name = make_nipype_name(fields)
                     pipeline.connect([(input_source, parent_node, [(nipype_input_name, input_name)])])
-            for j in xrange(i, len(self.commands)):
+            for j in range(i, len(self.commands)):
 
                 (child_node, child_inputs, _) = nodes[j]
 
@@ -400,7 +401,7 @@ class Tracker(object):
                 key = (self.command_classes[command.__class__], frozenset(inputs))
 
                 groups[key].append(idx)
-            for (key, val) in groups.iteritems():
+            for (key, val) in groups.items():
                 # if the "shared inputs" are actually empty, then don't group the nodes
                 if len(key[1]) == 0:
                     out_stage.extend([[idx] for idx in val])
@@ -541,7 +542,7 @@ class SubjServer(object):
             json = self.aggregate_json[subj]
             indices = len(json['subnodes'])
             outputs = []
-            for index in xrange(indices):
+            for index in range(indices):
                 outputs.append(self._computeOutputInfo(index, json))
             self.precomputed_output_info[subj] = outputs
 
@@ -555,7 +556,7 @@ class SubjServer(object):
             aggregate_node = []
             self.aggregated_output_spec.append(aggregate_node)
             max_count = max((len(subj_node) for subj_node in subj_nodes))
-            for j in xrange(max_count):
+            for j in range(max_count):
                 keys = set()
                 for subj_node in subj_nodes:
                     keys.update(subj_node[j].keys())

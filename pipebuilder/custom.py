@@ -67,14 +67,14 @@ class IntresCommand(Command):
 class FSLBinariseCommand(Command):
     def __init__(self, comment, **kwargs):
         """
-	Command to run ROBEX (robust brain extraction tool)
+    Command to run ROBEX (robust brain extraction tool)
 
         Keyword arguments:
         ------------------
         input, output: input and brain-extracted output
         out_mask: output mask (binary image) marking where the brain is
         """
-	self.cmd = 'fslmaths %(input)s -thr %(threshold)s -bin %(output)s'
+        self.cmd = 'fslmaths %(input)s -thr %(threshold)s -bin %(output)s'
         self.outfiles = [kwargs['output']]
         Command.__init__(self, comment, **kwargs)
 
